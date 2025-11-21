@@ -1,0 +1,38 @@
+﻿origen_term;destino_term;origen_lang;categoria;destino_lang;contexto;fuente
+Arterial highway;Arteria;Inglés;General;Español;Main high-capacity road used to move traffic across a city.;Glosario Base v2
+"Freeway; Turnpike";Autopista;Inglés;General;Español;High-speed roadway, sometimes requiring a toll.;Glosario Base v3
+Freeway (no toll);Autovía;Inglés;General;Español;High-speed roadway with no tolls.;Glosario Base v4
+Street;Calle;Inglés;General;Español;General urban road for local traffic.;Glosario Base v5
+Cul de sac street;"Calle Cerrada con Retorno; Fondo de Saco";Inglés;General;Español;Dead-end street that allows vehicles to turn around.;Glosario Base v6
+Dead-end street;Calle sin salida;Inglés;General;Español;Road with no exit or continuation.;Glosario Base v7
+Collector street;Calle Colectora;Inglés;General;Español;Road that gathers traffic from local streets and feeds larger roads.;Glosario Base v8
+Local street;Calle Local;Inglés;General;Español;Low-speed street providing direct access to homes or businesses.;Glosario Base v9
+One-way street;Calle de Sentido Único;Inglés;General;Español;Street where traffic moves in only one direction.;Glosario Base v10
+One-way reversible street;Calle de Sentido Único Reversible, o Alterno;Inglés;General;Español;Street whose direction changes based on time or demand.;Glosario Base v11
+One-way preferential street;Calle con un Sentido Preferente;Inglés;General;Español;Street where one direction has priority over the opposite.;Glosario Base v12
+Road;Camino;Inglés;General;Español;General road, often rural or secondary.;Glosario Base v13
+"Subsidiary road; formerly Farm to market road";Camino Vecinal;Inglés;General;Español;Road connecting rural areas to nearby towns or markets.;Glosario Base v14
+Local road;Camino Local;Inglés;General;Español;Short-distance secondary road.;Glosario Base v15
+Highway;Carretera;Inglés;General;Español;Major intercity road for long-distance travel.;Glosario Base v16
+International highway;Carretera Internacional;Inglés;General;Español;Highway that connects two or more countries.;Glosario Base v17
+National highway;Carretera Nacional;Inglés;General;Español;Main road managed at the national level.;Glosario Base v18
+Regional highway;Carretera Regional;Inglés;General;Español;Road serving travel within a specific region.;Glosario Base v19
+Secondary highway;Carretera Secundaria;Inglés;General;Español;Lower-priority highway compared to major routes.;Glosario Base v20
+Trunk highway;Carretera Troncal;Inglés;General;Español;Main backbone route within a road network.;Glosario Base v21
+Speed change lane;Carril de Cambio de Velocidad;Inglés;General;Español;Lane used to adjust speed before merging or exiting.;Glosario Base v22
+Acceleration lane;Carril de Aceleración;Inglés;General;Español;Lane where vehicles gain speed before merging.;Glosario Base v23
+Deceleration lane;Carril de Deceleración;Inglés;General;Español;Lane where vehicles slow down before exiting.;Glosario Base v24
+Storage lane;Carril de Parada;Inglés;General;Español;Lane used to temporarily store vehicles before movement.;Glosario Base v25
+Reversible lane;Carril Reversible;Inglés;General;Español;Lane whose direction changes during peak hours.;Glosario Base v26
+Climbing lane;"Carril de Subida; Carril de ascenso";Inglés;General;Español;Extra lane for slower vehicles on steep grades.;Glosario Base v27
+Traffic distributor;Distribuidor del Tránsito;Inglés;General;Español;Road element that distributes traffic to different routes.;Glosario Base v28
+Aisle for traffic movement;Pasillo de Circulación;Inglés;General;Español;Internal circulation aisle, often in parking areas.;Glosario Base v29
+Ramp;Rampa;Inglés;General;Español;Sloped connection between roads or levels.;Glosario Base v30
+Highway through an urban area;Travesía;Inglés;General;Español;Section of a highway passing through a town.;Glosario Base v31
+"Way; Traffic way; Public way";Vía;Inglés;General;Español;General term for a public road or route.;Glosario Base v32
+Expressway;Vía Expresa;Inglés;General;Español;Limited-access high-speed roadway.;Glosario Base v33
+Railroad;"Vía Férrea; Ferrocarril";Inglés;General;Español;Track system used for trains.;Glosario Base v34
+Frontage road;Vía Lateral;Inglés;General;Español;Parallel road giving access to properties along a highway.;Glosario Base v35
+Parkway;Vía Parque;Inglés;General;Español;Scenic road often surrounded by green areas.;Glosario Base v36
+Preferential way;Vía Preferente;Inglés;General;Español;Road where one traffic stream has priority.;Glosario Base v37
+Storage zone;Zona de Espera o Parada;Inglés;General;Español;Designated area for vehicles to wait temporarily.;Glosario Base v38

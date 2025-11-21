@@ -1,0 +1,6 @@
+origen_term,destino_term,origen_lang,destino_lang,categoria,contexto,fuente
+Hard Shoulder,Arcén,Inglés,Español,Ingeniería Civil,"El vehículo se detuvo en el arcén.",DGT
+Road Surface,Firme,Inglés,Español,Ingeniería Civil,"El pavimento debe ser de asfalto.",Manual de Carreteras
+Road Sign,Señal de tráfico,Inglés,Español,Señalización,"Señalización vertical u horizontal.",Reglamento
+Traffic Light,Semáforo,Inglés,Español,Señalización,"Pasó el semáforo en rojo.",Normativa Local
+Speed camera,Radar de tramo,Inglés,Español,Sistemas ITS,"Sistema inteligente de transporte.",Tecnología
