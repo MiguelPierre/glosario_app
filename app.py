@@ -4,7 +4,7 @@ import pandas as pd
 import io
 
 # --- 0. CONFIGURACIÓN INICIAL Y ESTADO ---
-st.set_page_config(page_title="Glosario Vial Pro", layout="wide", page_icon="🚧")
+st.set_page_config(page_title="GVPRO", layout="wide", page_icon="🚧")
 
 # Inicializa el estado para saber qué término mostrar
 if "termino_seleccionado_id" not in st.session_state:
@@ -23,6 +23,28 @@ def ejecutar_consulta(query, params=()):
     conn.commit()
     conn.close()
 
+# --- FUNCIÓN DE CABECERA CON LOGO Y TÍTULO ---
+def mostrar_cabecera():
+    # Usamos un contenedor principal para asegurar que el logo y el título sean consistentes.
+    with st.container():
+        # Configuramos 3 columnas: Columna 1 para el logo (33%), Columna 2 para el Título (67%), Columna 3 vacía para centrado.
+        col_titulo, col_logo = st.columns([2, 1]) # Ratio de 1:2 hace que el logo ocupe el 33.3% del ancho.
+
+        with col_titulo:
+            # Título vistoso y en negrita
+            st.markdown("# **Glosario Vial Profesional**")
+            st.caption("Central de Terminología Técnica EN/ES")
+
+        with col_logo:
+            # Reemplaza 'logo_empresa.png' por el nombre real de tu archivo PNG
+            try:
+                st.image("unnamed.jpg", use_container_width=True) 
+            except FileNotFoundError:   
+                st.warning("⚠️ Logo no encontrado. Asegúrate de que 'unnamed.jpg' esté en la misma carpeta.")
+        
+        
+        
+        st.divider() # Línea divisoria para separar la cabecera del contenido.
 
 # ----------------------------------------------------------------------
 # VISTA DE DETALLE: IMPLEMENTACIÓN AVANZADA
@@ -34,6 +56,8 @@ def mostrar_detalle_termino(termino_id):
         "SELECT * FROM terminos WHERE id = ?", conn, params=(termino_id,)
     ).iloc[0]
     conn.close()
+
+    mostrar_cabecera()
 
     # Botón para volver a la búsqueda
     if st.button("⬅️ Volver a los resultados de búsqueda"):
@@ -50,29 +74,29 @@ def mostrar_detalle_termino(termino_id):
 
     # COLUMNA DE ORIGEN (EN/Inglés)
     with col_en:
-        st.subheader(f"🌐 Término Origen ({dato['origen_lang']})")
+        st.subheader(f"🌐 Original term ({dato['origen_lang']})")
         st.markdown(f"## **{dato['origen_term']}**")
 
         # 1. Definición Formal de Origen
-        st.markdown("### 📝 Definición")
+        st.markdown("### 📝 Definition")
         if dato["origen_definicion"]:
-            st.code(dato["origen_definicion"], language="markdown")
+            st.info(dato["origen_definicion"])
         else:
-            st.info("Sin definición formal.")
+            st.info("Without formal definition.")
 
         # 2. Relaciones Conceptuales de Origen
-        st.markdown("### 🗂️ Relaciones Conceptuales")
+        st.markdown("### 🗂️ Conceptual relationships")
         if dato["origen_relaciones"]:
             st.markdown(f"> *{dato['origen_relaciones']}*")
         else:
-            st.info("Sin relaciones jerárquicas o conceptuales.")
+            st.info("Without hierarchical or conceptual relationships.")
 
-        # 3. Contexto Asociativo de Origen (Campo existente)
-        st.markdown("### Contexto de Uso")
-        if dato["contexto"]:
-            st.markdown(f"> *{dato['contexto']}*")
+        # 3. Contexto de Uso (Origen)
+        st.markdown("### Associative context")
+        if dato['contexto']: # Campo existente que ahora será el origen
+            st.info(dato['contexto'])
         else:
-            st.info("Sin contexto de uso.")
+             st.info("Sin contexto de uso en el idioma de origen.")
 
     # COLUMNA DE DESTINO (ES/Español)
     with col_es:
@@ -82,7 +106,7 @@ def mostrar_detalle_termino(termino_id):
         # 1. Definición Formal de Destino
         st.markdown("### 📝 Definición")
         if dato["destino_definicion"]:
-            st.code(dato["destino_definicion"], language="markdown")
+            st.info(dato["destino_definicion"])
         else:
             st.info("Sin definición formal.")
 
@@ -92,6 +116,13 @@ def mostrar_detalle_termino(termino_id):
             st.markdown(f"> *{dato['destino_relaciones']}*")
         else:
             st.info("Sin relaciones conceptuales.")
+
+        # 3. Contexto de Uso (Destino) - Nuevo
+        st.markdown("### Contexto de Uso (Destino)")
+        if dato['destino_contexto']:
+            st.info(dato['destino_contexto'])
+        else:
+            st.info("Sin contexto de uso en el idioma de destino.")
 
         # 3. Referencia Visual (Imagen)
         st.markdown("### 📸 Referencia Visual")
@@ -105,7 +136,7 @@ def mostrar_detalle_termino(termino_id):
 # VISTA DE BÚSQUEDA (MAIN APP) - Solo la estructura
 # ----------------------------------------------------------------------
 def mostrar_busqueda():
-    st.title("🚧 Glosario de Seguridad Vial")
+    mostrar_cabecera()
 
     tab1, tab2, tab3 = st.tabs(["🔍 Consultar", "➕ Añadir", "⚙️ Gestionar"])
 
@@ -209,10 +240,12 @@ def mostrar_busqueda():
             )
 
             # CAMPO EXISTENTE (Contexto)
-            nuevo_contexto = st.text_area("Contexto de Uso (ej. Frase de ejemplo)")
-            nueva_fuente = st.text_input(
-                "Fuente de Origen (ej. Manual de Carreteras, DGT)"
-            )
+            # CAMPOS DE CONTEXTO BILINGÜE
+            ctx_col_orig, ctx_col_dest = st.columns(2)
+            nuevo_origen_contexto = ctx_col_orig.text_area("Contexto de Uso (Origen)")
+            nuevo_destino_contexto = ctx_col_dest.text_area("Contexto de Uso (Destino)")
+            
+            nueva_fuente = st.text_input("Fuente de Origen (ej. Manual de Carreteras, DGT)")
 
             st.markdown("---")
             st.subheader("🗂️ Relaciones Conceptuales (Jerarquías)")
@@ -239,8 +272,8 @@ def mostrar_busqueda():
                     if archivo_imagen:
                         blob_imagen = archivo_imagen.getvalue()
 
-                    sql = """INSERT INTO terminos (origen_term, destino_term, categoria, origen_lang, destino_lang, contexto, fuente, imagen, origen_definicion, destino_definicion, origen_relaciones, destino_relaciones) 
-                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+                    sql = """INSERT INTO terminos (origen_term, destino_term, categoria, origen_lang, destino_lang, fuente, imagen, origen_definicion, destino_definicion, origen_relaciones, destino_relaciones, origen_contexto, destino_contexto) 
+                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
 
                     ejecutar_consulta(
                         sql,
@@ -250,7 +283,8 @@ def mostrar_busqueda():
                             nueva_categoria,
                             lang_origen,
                             lang_destino,
-                            nuevo_contexto,
+                            nuevo_origen_contexto,
+                            nuevo_destino_contexto,
                             nueva_fuente,
                             blob_imagen,
                             nueva_origen_definicion,
@@ -283,43 +317,97 @@ def mostrar_busqueda():
                 ]
                 for index, row in todos_terminos.iterrows()
             }
+            # Se usa un placeholder al inicio para evitar que se cargue un término por defecto.
+            lista_opciones = ["--- Selecciona un término ---"] + list(opciones.keys())
             seleccion = st.selectbox(
-                "Selecciona el término a gestionar:", list(opciones.keys())
+                "Selecciona el término a gestionar:", lista_opciones
             )
-            id_seleccionado = opciones[seleccion]
 
-            conn = obtener_conexion()
-            # Leemos todo para rellenar el formulario
-            dato = pd.read_sql(
-                "SELECT * FROM terminos WHERE id = ?", conn, params=(id_seleccionado,)
-            ).iloc[0]
-            conn.close()
+            if seleccion != "--- Selecciona un término ---":
+                id_seleccionado = opciones[seleccion]
 
-            with st.form("form_edicion"):
-                st.subheader(f"Editando ID: {id_seleccionado}")
-                e_origen = st.text_input("Origen", value=dato["origen_term"])
-                e_destino = st.text_input("Destino", value=dato["destino_term"])
-                # Nota: La edición de imagen es compleja, de momento permitimos editar texto
-                st.info(
-                    "ℹ️ Para cambiar la imagen, es mejor borrar y crear de nuevo el término."
-                )
+                conn = obtener_conexion()
+                # Leemos TODO para rellenar el formulario, incluyendo los nuevos campos avanzados
+                dato = pd.read_sql(
+                    "SELECT * FROM terminos WHERE id = ?", conn, params=(id_seleccionado,)
+                ).iloc[0]
+                conn.close()
 
-                col_del, col_upd = st.columns([1, 4])
-                with col_upd:
-                    if st.form_submit_button("💾 Actualizar Textos"):
-                        ejecutar_consulta(
-                            "UPDATE terminos SET origen_term=?, destino_term=? WHERE id=?",
-                            (e_origen, e_destino, id_seleccionado),
-                        )
-                        st.success("Actualizado.")
-                        st.rerun()
-                with col_del:
-                    if st.form_submit_button("🗑️ BORRAR", type="primary"):
-                        ejecutar_consulta(
-                            "DELETE FROM terminos WHERE id=?", (id_seleccionado,)
-                        )
-                        st.error("Eliminado.")
-                        st.rerun()
+                with st.form("form_edicion"):
+                    st.subheader(f"Editando ID: {id_seleccionado}")
+                    
+                    # 1. TÉRMINOS Y CATEGORÍA
+                    c1, c2, c3 = st.columns(3)
+                    e_origen = c1.text_input("Término Origen", value=dato["origen_term"])
+                    e_destino = c2.text_input("Término Destino", value=dato["destino_term"])
+                    
+                    categorias = ["General", "Señalización", "Ingeniería Civil", "Sistemas ITS", "Legal/Normativa"]
+                    # Buscamos el índice actual para que se seleccione por defecto
+                    try:
+                        index_cat = categorias.index(dato["categoria"])
+                    except ValueError:
+                        index_cat = 0 # Valor por defecto si no lo encuentra
+                        
+                    e_categoria = c3.selectbox("Categoría", categorias, index=index_cat)
+                    
+                    st.markdown("---")
+                    
+                    # 2. DEFINICIONES
+                    st.subheader("📝 Definiciones")
+                    def_col_orig, def_col_dest = st.columns(2)
+                    e_origen_def = def_col_orig.text_area("Definición (Origen)", value=dato["origen_definicion"] if pd.notna(dato["origen_definicion"]) else "")
+                    e_destino_def = def_col_dest.text_area("Definición (Destino)", value=dato["destino_definicion"] if pd.notna(dato["destino_definicion"]) else "")
+                    
+                    # 3. CONTEXTO Y FUENTE BILINGÜE
+                    st.subheader("🌐 Contexto de Uso")
+                    ctx_col_orig, ctx_col_dest = st.columns(2)
+                    e_origen_ctx = ctx_col_orig.text_area("Contexto (Origen)", value=dato["contexto"])
+                    # Usamos 'destino_contexto' si existe, si no, cadena vacía
+                    e_destino_ctx = ctx_col_dest.text_area("Contexto (Destino)", value=dato["destino_contexto"] if pd.notna(dato["destino_contexto"]) else "")
+                    
+                    e_fuente = st.text_input("Fuente de Origen", value=dato["fuente"])
+                    
+                    st.markdown("---")
+                    
+                    # 4. RELACIONES CONCEPTUALES
+                    st.subheader("🗂️ Relaciones Conceptuales")
+                    rel_col_orig, rel_col_dest = st.columns(2)
+                    e_origen_rel = rel_col_orig.text_area("Relaciones (Origen)", value=dato["origen_relaciones"] if pd.notna(dato["origen_relaciones"]) else "")
+                    e_destino_rel = rel_col_dest.text_area("Relaciones (Destino)", value=dato["destino_relaciones"] if pd.notna(dato["destino_relaciones"]) else "")
+
+                    st.info("ℹ️ La edición de imágenes (`imagen`) no está disponible. Para cambiarla, es mejor borrar y crear de nuevo el término.")
+
+                    # BOTONES DE ACCIÓN
+                    col_del, col_upd = st.columns([1, 4])
+                    
+                    with col_upd:
+                        if st.form_submit_button("💾 Actualizar Todos los Campos"):
+                            # Consulta SQL de actualización COMPLETA
+                            sql_update = """
+                                UPDATE terminos SET 
+                                origen_term=?, destino_term=?, categoria=?, contexto=?, destino_contexto=?, fuente=?, 
+                                origen_definicion=?, destino_definicion=?, origen_relaciones=?, destino_relaciones=?
+                                WHERE id=?
+                            """
+                            ejecutar_consulta(sql_update, (
+                                e_origen, e_destino, e_categoria, 
+                                e_origen_ctx, e_destino_ctx, # <-- ¡NUEVOS CONTEXTOS!
+                                e_fuente,
+                                e_origen_def, e_destino_def, e_origen_rel, e_destino_rel,
+                                id_seleccionado 
+                            ))
+                            st.success("✅ ¡Término actualizado correctamente!")
+                            st.rerun()
+                            
+                    with col_del:
+                        if st.form_submit_button("🗑️ BORRAR", type="primary"):
+                            ejecutar_consulta(
+                                "DELETE FROM terminos WHERE id=?", (id_seleccionado,)
+                            )
+                            st.error("🗑️ Término eliminado.")
+                            st.rerun()
+        else:
+            st.warning("No hay términos en la base de datos para gestionar.")
 
 
 # ----------------------------------------------------------------------
